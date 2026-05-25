@@ -324,6 +324,49 @@ function drawPattern(grid, breed, colors, pose) {
     [[13, 2], [14, 2], [13, 3], [14, 3], [12, 4]].forEach(([x, y]) => set(grid, x + hx, y + hy, colors.A));
     [[6, 11], [7, 11], [12, 12], [13, 12]].forEach(([x, y]) => set(grid, x, y + by, colors.S));
   }
+
+  if (breed.pattern === 'tuxedo') {
+    [[8, 6], [9, 6], [10, 6], [9, 7], [10, 7], [8, 8], [9, 8], [10, 8], [11, 8]].forEach(([x, y]) => {
+      set(grid, x + hx, y + hy, colors.L);
+    });
+    [[6, 15], [7, 15], [12, 15], [13, 15], [6, 16], [13, 16]].forEach(([x, y]) => {
+      set(grid, x, y + by, colors.L);
+    });
+  }
+
+  if (breed.pattern === 'cow') {
+    [[4, 3], [5, 3], [4, 4], [5, 4], [6, 4], [14, 5], [15, 5], [14, 6], [15, 6]].forEach(([x, y]) => {
+      set(grid, x + hx, y + hy, colors.S);
+    });
+    [[5, 12], [6, 12], [5, 13], [12, 13], [13, 13], [12, 14], [13, 14]].forEach(([x, y]) => {
+      set(grid, x, y + by, colors.S);
+    });
+  }
+
+  if (breed.pattern === 'tortie') {
+    [[5, 2], [6, 3], [7, 4], [12, 3], [13, 4], [14, 5], [8, 6], [11, 7]].forEach(([x, y], i) => {
+      set(grid, x + hx, y + hy, i % 2 ? colors.A : colors.S);
+    });
+    [[6, 11], [7, 12], [12, 12], [13, 13], [8, 14], [11, 15]].forEach(([x, y], i) => {
+      set(grid, x, y + by, i % 2 ? colors.A : colors.S);
+    });
+  }
+
+  if (breed.pattern === 'silver-tabby') {
+    [[8, 2], [9, 2], [10, 2], [7, 3], [11, 3], [5, 5], [14, 5], [6, 7], [13, 7]].forEach(([x, y]) => {
+      set(grid, x + hx, y + hy, colors.S);
+    });
+    [[7, 11], [12, 11], [6, 13], [13, 13], [8, 15], [11, 15]].forEach(([x, y]) => set(grid, x, y + by, colors.S));
+  }
+
+  if (breed.pattern === 'ticked') {
+    [[6, 4], [9, 4], [12, 4], [5, 7], [8, 7], [11, 7], [14, 7]].forEach(([x, y], i) => {
+      set(grid, x + hx, y + hy, i % 2 ? colors.A : colors.S);
+    });
+    [[7, 11], [10, 12], [13, 13], [6, 14], [11, 15]].forEach(([x, y], i) => {
+      set(grid, x, y + by, i % 2 ? colors.A : colors.S);
+    });
+  }
 }
 
 function drawSiameseMask(grid, breed, colors, pose) {
