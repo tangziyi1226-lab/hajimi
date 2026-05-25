@@ -167,6 +167,7 @@ function drawBodyBridge(grid, pose, colors) {
       const isEdge = x === left || x === right;
       set(grid, x, y, isEdge ? colors.O : colors.F);
     }
+    set(grid, left - 1, y, null);
   }
 
   for (let x = 7; x <= 11; x++) set(grid, x, top, colors.L);
@@ -188,14 +189,11 @@ function drawPawForeground(grid, pose, colors) {
     [6, groundY - 1, colors.F],
     [12, groundY - 1, colors.F],
     [13, groundY - 1, colors.O],
-    [4, groundY, colors.O],
     [5, groundY, colors.D],
     [6, groundY, colors.D],
-    [7, groundY, colors.O],
     [11, groundY, colors.O],
     [12, groundY, colors.D],
     [13, groundY, colors.D],
-    [14, groundY, colors.O],
   ];
 
   paws.forEach(([x, py, color]) => set(grid, x, py, color));
