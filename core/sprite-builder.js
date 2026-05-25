@@ -161,10 +161,10 @@ function drawBodyBridge(grid, pose, colors) {
   const left = 4 - widen;
   const right = 14 + widen;
 
-  // 坐姿核心：一整团肚子，不画腿，后腿只通过轮廓暗示。
+  // 坐姿核心：一整团肚子，后腿只通过轮廓暗示。
   for (let y = top; y <= top + 2; y++) {
     for (let x = left; x <= right; x++) {
-      const isEdge = x === left || x === right || y === top + 2;
+      const isEdge = x === left || x === right;
       set(grid, x, y, isEdge ? colors.O : colors.F);
     }
   }
@@ -176,22 +176,26 @@ function drawBodyBridge(grid, pose, colors) {
 function drawPawForeground(grid, pose, colors) {
   const bob = pose.bob ?? 0;
   const bodyY = pose.bodyY ?? 0;
-  const y = 16 + bodyY + bob;
+  const groundY = 17 + bodyY + bob;
 
-  // 遮挡关系：前爪是挂在肚子前面的两个团子，不再解释成腿。
+  // 前爪从肚子前方垂到脚底基线，避免看起来悬空。
   const paws = [
-    [5, y, colors.F],
-    [6, y, colors.F],
-    [12, y, colors.F],
-    [13, y, colors.F],
-    [4, y, colors.O],
-    [7, y, colors.O],
-    [11, y, colors.O],
-    [14, y, colors.O],
-    [5, y + 1, colors.D],
-    [6, y + 1, colors.D],
-    [12, y + 1, colors.D],
-    [13, y + 1, colors.D],
+    [5, groundY - 2, colors.O],
+    [6, groundY - 2, colors.F],
+    [12, groundY - 2, colors.F],
+    [13, groundY - 2, colors.O],
+    [5, groundY - 1, colors.O],
+    [6, groundY - 1, colors.F],
+    [12, groundY - 1, colors.F],
+    [13, groundY - 1, colors.O],
+    [4, groundY, colors.O],
+    [5, groundY, colors.D],
+    [6, groundY, colors.D],
+    [7, groundY, colors.O],
+    [11, groundY, colors.O],
+    [12, groundY, colors.D],
+    [13, groundY, colors.D],
+    [14, groundY, colors.O],
   ];
 
   paws.forEach(([x, py, color]) => set(grid, x, py, color));
