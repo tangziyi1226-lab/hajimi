@@ -105,6 +105,29 @@ function drawBase(grid, breed, pose, colors) {
   }
 }
 
+function drawNeckBridge(grid, pose, colors) {
+  const bob = pose.bob ?? 0;
+  const headX = pose.headX ?? 0;
+  const bodyX = pose.bodyX ?? 0;
+  const bodyY = pose.bodyY ?? 0;
+  const headBottom = 10 + (pose.headY ?? 0) + bob;
+  const bodyTop = 11 + bodyY + bob;
+  const fromY = Math.min(headBottom, bodyTop);
+  const toY = Math.max(headBottom, bodyTop);
+
+  for (let y = fromY; y <= toY; y++) {
+    const t = toY === fromY ? 0 : (y - fromY) / (toY - fromY);
+    const center = Math.round(9 + headX * (1 - t) + bodyX * t);
+    set(grid, center - 3, y, colors.O);
+    set(grid, center - 2, y, colors.F);
+    set(grid, center - 1, y, colors.F);
+    set(grid, center, y, colors.F);
+    set(grid, center + 1, y, colors.F);
+    set(grid, center + 2, y, colors.F);
+    set(grid, center + 3, y, colors.O);
+  }
+}
+
 function drawWhiskers(grid, pose, colors) {
   const hx = 0 + (pose.headX ?? 0);
   const hy = 0 + (pose.headY ?? 0) + (pose.bob ?? 0);
@@ -266,6 +289,7 @@ export function buildFrame(breed, pose = {}) {
 
   drawTail(grid, pose, colors);
   drawBase(grid, breed, pose, colors);
+  drawNeckBridge(grid, pose, colors);
   drawSiameseMask(grid, breed, colors, pose);
   drawPattern(grid, breed, colors, pose);
   drawFoldEars(grid, breed, colors, pose);
