@@ -5,5 +5,8 @@
   "description": "哈脊米像素桌宠 — 30 品种猫 × 12 姿态",
   "scripts": {
     "start": "node server.js"
+  },
+  "dependencies": {
+    "@vercel/kv": "latest"
   }
 }
