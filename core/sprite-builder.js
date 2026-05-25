@@ -367,6 +367,36 @@ function drawPattern(grid, breed, colors, pose) {
       set(grid, x, y + by, i % 2 ? colors.A : colors.S);
     });
   }
+
+  if (breed.pattern === 'marble') {
+    [[7, 3], [8, 3], [11, 3], [12, 3], [6, 5], [7, 6], [12, 6], [13, 5]].forEach(([x, y]) => {
+      set(grid, x + hx, y + hy, colors.S);
+    });
+    [[6, 11], [7, 11], [8, 12], [12, 12], [13, 13], [6, 14], [7, 15], [12, 15]].forEach(([x, y]) => {
+      set(grid, x, y + by, colors.S);
+    });
+  }
+
+  if (breed.pattern === 'van') {
+    [[5, 2], [6, 2], [5, 3], [13, 2], [14, 2], [14, 3], [15, 4]].forEach(([x, y], i) => {
+      set(grid, x + hx, y + hy, i < 3 ? colors.S : colors.A);
+    });
+    [[13, 13], [14, 13], [13, 14], [14, 14]].forEach(([x, y]) => set(grid, x, y + by, colors.S));
+  }
+
+  if (breed.pattern === 'point') {
+    [[5, 1], [6, 1], [13, 1], [14, 1], [7, 5], [8, 5], [11, 5], [12, 5], [8, 6], [11, 6]].forEach(([x, y]) => {
+      set(grid, x + hx, y + hy, colors.A);
+    });
+    [[5, 16], [6, 16], [12, 16], [13, 16], [6, 17], [13, 17]].forEach(([x, y]) => set(grid, x, y + by, colors.A));
+  }
+
+  if (breed.pattern === 'smoke') {
+    [[8, 4], [9, 5], [10, 5], [11, 4], [7, 8], [12, 8]].forEach(([x, y]) => {
+      set(grid, x + hx, y + hy, colors.L);
+    });
+    [[7, 12], [8, 12], [11, 12], [12, 12], [6, 15], [13, 15]].forEach(([x, y]) => set(grid, x, y + by, colors.L));
+  }
 }
 
 function drawSiameseMask(grid, breed, colors, pose) {

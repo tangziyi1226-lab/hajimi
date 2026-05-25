@@ -20,6 +20,16 @@ export const CAT_REGISTRY = [
   { id: 'abyssinian', path: './cats/abyssinian/cat.js', import: () => import('./cats/abyssinian/cat.js') },
   { id: 'norwegian-forest', path: './cats/norwegian-forest/cat.js', import: () => import('./cats/norwegian-forest/cat.js') },
   { id: 'sphynx', path: './cats/sphynx/cat.js', import: () => import('./cats/sphynx/cat.js') },
+  { id: 'munchkin', path: './cats/munchkin/cat.js', import: () => import('./cats/munchkin/cat.js') },
+  { id: 'devon-rex', path: './cats/devon-rex/cat.js', import: () => import('./cats/devon-rex/cat.js') },
+  { id: 'american-shorthair', path: './cats/american-shorthair/cat.js', import: () => import('./cats/american-shorthair/cat.js') },
+  { id: 'himalayan', path: './cats/himalayan/cat.js', import: () => import('./cats/himalayan/cat.js') },
+  { id: 'bombay', path: './cats/bombay/cat.js', import: () => import('./cats/bombay/cat.js') },
+  { id: 'korat', path: './cats/korat/cat.js', import: () => import('./cats/korat/cat.js') },
+  { id: 'chartreux', path: './cats/chartreux/cat.js', import: () => import('./cats/chartreux/cat.js') },
+  { id: 'turkish-van', path: './cats/turkish-van/cat.js', import: () => import('./cats/turkish-van/cat.js') },
+  { id: 'manx', path: './cats/manx/cat.js', import: () => import('./cats/manx/cat.js') },
+  { id: 'toyger', path: './cats/toyger/cat.js', import: () => import('./cats/toyger/cat.js') },
 ];
 
 export async function loadAllCats() {
