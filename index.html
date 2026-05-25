@@ -3,41 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>哈脊米 · 像素桌宠图鉴</title>
+  <title>哈脊米人格匹配局</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <h1>🐱 哈脊米 · 像素桌宠图鉴</h1>
-    <p>30 个品种 · 12 种姿态 · 纯像素渲染 · 星露谷风格</p>
+  <header class="hero">
+    <p class="eyebrow">Hajimi Personality Match</p>
+    <h1>测测你是哪一只哈脊米</h1>
+    <p>填 MBTI、性别和生日，回答 5 道小题，生成你的专属哈“脊”米和人格图鉴。</p>
   </header>
 
-  <nav class="controls-bar" id="global-controls"></nav>
+  <main class="app-shell">
+    <section class="panel match-panel" aria-labelledby="match-title">
+      <div class="section-title">
+        <span>01</span>
+        <h2 id="match-title">开始匹配</h2>
+      </div>
 
-  <section class="api-demo">
-    <h2>统一动作接口</h2>
-    <pre><code>import createCat from './cats/orange-tabby/cat.js';
+      <form id="match-form" class="match-form">
+        <div class="field-grid">
+          <label>
+            <span>你的 MBTI</span>
+            <select name="mbti" required>
+              <option value="">选择 MBTI</option>
+              <option>INTJ</option>
+              <option>INTP</option>
+              <option>ENTJ</option>
+              <option>ENTP</option>
+              <option>INFJ</option>
+              <option>INFP</option>
+              <option>ENFJ</option>
+              <option>ENFP</option>
+              <option>ISTJ</option>
+              <option>ISFJ</option>
+              <option>ESTJ</option>
+              <option>ESFJ</option>
+              <option>ISTP</option>
+              <option>ISFP</option>
+              <option>ESTP</option>
+              <option>ESFP</option>
+            </select>
+          </label>
 
-const cat = createCat();
-cat.mount('#sprite');
+          <label>
+            <span>性别</span>
+            <select name="gender" required>
+              <option value="">选择性别</option>
+              <option value="女">女</option>
+              <option value="男">男</option>
+              <option value="非二元">非二元</option>
+              <option value="不想说">不想说</option>
+            </select>
+          </label>
 
-// 方式一：方法调用
-cat.forward();    // 前倾
-cat.happy();      // 开心
-cat.tired();      // 疲惫
+          <label>
+            <span>生日</span>
+            <input type="date" name="birthday" required />
+          </label>
+        </div>
 
-// 方式二：play 通用接口
-cat.play('healthy');
-cat.play('tiltLeft');
+        <fieldset class="question">
+          <legend>1. 周末你更像哪种状态？</legend>
+          <label><input type="radio" name="q1" value="窝在角落充电，顺便观察世界" required />窝在角落充电，顺便观察世界</label>
+          <label><input type="radio" name="q1" value="约朋友出门，把能量撒满街" />约朋友出门，把能量撒满街</label>
+          <label><input type="radio" name="q1" value="临时起意，去哪里都可以" />临时起意，去哪里都可以</label>
+        </fieldset>
 
-// 获取所有状态
-cat.getStates();  // [{ key, label, frames }, ...]</code></pre>
-  </section>
+        <fieldset class="question">
+          <legend>2. 遇到难题时，你通常会？</legend>
+          <label><input type="radio" name="q2" value="先拆成步骤，慢慢解决" required />先拆成步骤，慢慢解决</label>
+          <label><input type="radio" name="q2" value="凭直觉抓重点，快速行动" />凭直觉抓重点，快速行动</label>
+          <label><input type="radio" name="q2" value="找人聊聊，边说边想通" />找人聊聊，边说边想通</label>
+        </fieldset>
 
-  <main class="gallery" id="gallery"></main>
+        <fieldset class="question">
+          <legend>3. 你的灵魂食物更接近？</legend>
+          <label><input type="radio" name="q3" value="热乎乎的碳水，安全感第一" required />热乎乎的碳水，安全感第一</label>
+          <label><input type="radio" name="q3" value="酸甜冰爽，越新奇越好" />酸甜冰爽，越新奇越好</label>
+          <label><input type="radio" name="q3" value="精致小点心，仪式感拉满" />精致小点心，仪式感拉满</label>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend>4. 压力大的时候，你会变成？</legend>
+          <label><input type="radio" name="q4" value="表面冷静，内心高速运转" required />表面冷静，内心高速运转</label>
+          <label><input type="radio" name="q4" value="想躲起来睡一觉再说" />想躲起来睡一觉再说</label>
+          <label><input type="radio" name="q4" value="越忙越兴奋，边冲边喊" />越忙越兴奋，边冲边喊</label>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend>5. 你最想要的哈脊米搭子是？</legend>
+          <label><input type="radio" name="q5" value="安静陪伴，不打扰但一直在" required />安静陪伴，不打扰但一直在</label>
+          <label><input type="radio" name="q5" value="热情贴贴，每天制造快乐" />热情贴贴，每天制造快乐</label>
+          <label><input type="radio" name="q5" value="聪明独立，偶尔给你惊喜" />聪明独立，偶尔给你惊喜</label>
+        </fieldset>
+
+        <button class="primary-button" type="submit" id="submit-button">召唤我的哈脊米</button>
+        <p class="form-note" id="status-text">提交后会调用 DeepSeek 生成性格描述；没有后端时会使用本地匹配兜底。</p>
+      </form>
+    </section>
+
+    <section class="panel result-panel is-hidden" id="result-panel" aria-live="polite">
+      <div class="section-title">
+        <span>02</span>
+        <h2>你的匹配结果</h2>
+      </div>
+      <div class="result-card">
+        <div class="result-sprite" id="result-sprite"></div>
+        <div class="result-copy">
+          <p class="result-label">你解锁了</p>
+          <h3 id="result-name"></h3>
+          <p id="result-description"></p>
+          <div class="trait-list" id="trait-list"></div>
+        </div>
+      </div>
+      <button class="secondary-button" type="button" id="atlas-jump">查看我的图鉴</button>
+    </section>
+
+    <section class="panel atlas-panel" id="atlas-panel" aria-labelledby="atlas-title">
+      <div class="section-title">
+        <span>03</span>
+        <h2 id="atlas-title">哈脊米图鉴</h2>
+      </div>
+      <p class="atlas-intro">已解锁的哈脊米会露出真身；未解锁会先用问号占位。每张卡片会显示当前服务器记录的匹配人数。</p>
+      <div class="atlas-stats" id="atlas-stats"></div>
+      <div class="gallery" id="gallery"></div>
+    </section>
+  </main>
 
   <footer>
-    每个品种独立文件夹，可直接 <code>import createCat from './cats/xxx/cat.js'</code> 复用
+    手机扫码访问同一个局域网地址即可参与匹配。
   </footer>
 
   <script type="module" src="app.js"></script>

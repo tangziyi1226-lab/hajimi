@@ -2,5 +2,8 @@
   "name": "hajimi",
   "version": "1.0.0",
   "type": "module",
-  "description": "哈脊米像素桌宠 — 30 品种猫 × 12 姿态"
+  "description": "哈脊米像素桌宠 — 30 品种猫 × 12 姿态",
+  "scripts": {
+    "start": "node server.js"
+  }
 }
