@@ -93,14 +93,11 @@ function collectPayload() {
     profile: {
       mbti: data.get('mbti'),
       gender: data.get('gender'),
-      birthday: data.get('birthday'),
     },
     answers: [
-      { question: '周末你更像哪种状态？', answer: data.get('q1') },
-      { question: '遇到难题时，你通常会？', answer: data.get('q2') },
-      { question: '你的灵魂食物更接近？', answer: data.get('q3') },
-      { question: '压力大的时候，你会变成？', answer: data.get('q4') },
-      { question: '你最想要的哈脊米搭子是？', answer: data.get('q5') },
+      { question: '用三句话描述一下你最近的精神状态', answer: data.get('q1') },
+      { question: '你希望你的哈脊米怎么陪你？', answer: data.get('q2') },
+      { question: '朋友眼里的你通常是什么样？', answer: data.get('q3') },
     ],
     cats: catProfiles,
   };
@@ -139,13 +136,14 @@ function renderAtlas() {
   gallery.innerHTML = '';
 
   const totalMatches = Object.values(stats).reduce((sum, count) => sum + Number(count || 0), 0);
+  const claimedCount = cats.filter((cat) => isClaimed(cat.id)).length;
   atlasStats.innerHTML = `
-    <span>已解锁 ${unlocked.size}/${cats.length}</span>
+    <span>全站已认领 ${claimedCount}/${cats.length}</span>
     <span>累计匹配 ${totalMatches} 人次</span>
   `;
 
   cats.forEach((cat) => {
-    const isUnlocked = unlocked.has(cat.id);
+    const isUnlocked = isClaimed(cat.id);
     const card = document.createElement('article');
     card.className = `cat-card ${isUnlocked ? 'is-unlocked' : 'is-locked'}`;
 
@@ -171,7 +169,7 @@ function renderAtlas() {
 
     const personality = document.createElement('p');
     personality.className = 'personality';
-    personality.textContent = isUnlocked ? cat.personality : '完成匹配后解锁它的真身和性格。';
+    personality.textContent = isUnlocked ? cat.personality : '还没有人认领过它，等第一个有缘人出现。';
 
     const count = document.createElement('span');
     count.className = 'state-label';
@@ -204,7 +202,6 @@ function buildLocalMatch(payload) {
   const seed = [
     payload.profile.mbti,
     payload.profile.gender,
-    payload.profile.birthday,
     ...payload.answers.map((item) => item.answer),
   ].join('|');
   const index = Math.abs(hashString(seed)) % catProfiles.length;
@@ -222,21 +219,19 @@ function buildLocalMatch(payload) {
 
 function buildLocalTraits(payload) {
   const mbti = String(payload.profile.mbti || '').toUpperCase();
-  const month = Number(String(payload.profile.birthday || '').slice(5, 7));
-  const season = month >= 3 && month <= 5
-    ? '春日好奇心'
-    : month >= 6 && month <= 8
-      ? '夏日行动力'
-      : month >= 9 && month <= 11
-        ? '秋日观察力'
-        : '冬日蓄能感';
+  const answerText = payload.answers.map((item) => item.answer || '').join(' ');
+  const companionTrait = /贴|陪|抱|安慰|emo|情绪/.test(answerText)
+    ? '需要温柔贴贴'
+    : /冲|疯|玩|热闹|朋友/.test(answerText)
+      ? '快乐外放'
+      : '安静陪伴型';
 
   const traits = [
     mbti.startsWith('I') ? '安静蓄电' : '外放发光',
     mbti.includes('N') ? '脑洞巡游' : '细节雷达',
     mbti.includes('T') ? '理性拆解' : '共情敏锐',
     mbti.endsWith('J') ? '计划感强' : '随机应变',
-    season,
+    companionTrait,
   ];
 
   return traits.filter(Boolean);
@@ -245,6 +240,10 @@ function buildLocalTraits(payload) {
 function incrementLocalStat(catId) {
   stats = { ...stats, [catId]: Number(stats[catId] || 0) + 1 };
   writeJson(STORAGE_KEYS.stats, stats);
+}
+
+function isClaimed(catId) {
+  return unlocked.has(catId) || Number(stats[catId] || 0) > 0;
 }
 
 function setLoading(isLoading, message) {

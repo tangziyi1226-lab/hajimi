@@ -111,7 +111,7 @@ body {
 
 .field-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.75rem;
 }
 
@@ -138,9 +138,8 @@ body {
 }
 
 select,
-input[type='date'] {
+textarea {
   width: 100%;
-  min-height: 2.8rem;
   font: inherit;
   color: var(--text);
   background: var(--bg-deep);
@@ -149,21 +148,18 @@ input[type='date'] {
   padding: 0.45rem 0.55rem;
 }
 
-.question label {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  padding: 0.55rem;
-  background: rgba(23, 35, 24, 0.36);
-  border: 1px solid rgba(20, 35, 19, 0.75);
-  color: var(--text);
-  font-size: 0.82rem;
-  line-height: 1.45;
+select {
+  min-height: 2.8rem;
 }
 
-.question input {
-  accent-color: var(--accent);
-  margin-top: 0.2rem;
+textarea {
+  min-height: 6.8rem;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+textarea::placeholder {
+  color: rgba(203, 189, 152, 0.72);
 }
 
 .primary-button,

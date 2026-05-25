@@ -76,7 +76,7 @@ async function matchHajimi(payload) {
           {
             role: 'system',
             content: [
-              '你是哈脊米人格匹配师。根据用户 MBTI、性别、生日和 5 道题答案，从候选资产库里选择一只最匹配的哈脊米。',
+              '你是哈脊米人格匹配师。根据用户 MBTI、性别和 3 道开放题答案，从候选资产库里选择一只最匹配的哈脊米。',
               '只能选择候选 cats 里已有的 id，不要杜撰新猫。',
               '只输出 JSON，不要 Markdown，不要解释。',
               'JSON 结构必须是：{"catId":"候选 id","name":"候选 name","description":"60到90字中文性格描述","traits":["人格特征1","人格特征2","人格特征3","人格特征4"]}',
@@ -126,7 +126,6 @@ function buildLocalMatch(payload) {
   const seed = [
     payload.profile?.mbti,
     payload.profile?.gender,
-    payload.profile?.birthday,
     ...(payload.answers || []).map((item) => item.answer),
   ].join('|');
   const index = cats.length ? Math.abs(hashString(seed)) % cats.length : 0;
@@ -144,21 +143,19 @@ function buildLocalMatch(payload) {
 
 function buildLocalTraits(payload) {
   const mbti = String(payload.profile?.mbti || '').toUpperCase();
-  const month = Number(String(payload.profile?.birthday || '').slice(5, 7));
-  const season = month >= 3 && month <= 5
-    ? '春日好奇心'
-    : month >= 6 && month <= 8
-      ? '夏日行动力'
-      : month >= 9 && month <= 11
-        ? '秋日观察力'
-        : '冬日蓄能感';
+  const answerText = (payload.answers || []).map((item) => item.answer || '').join(' ');
+  const companionTrait = /贴|陪|抱|安慰|emo|情绪/.test(answerText)
+    ? '需要温柔贴贴'
+    : /冲|疯|玩|热闹|朋友/.test(answerText)
+      ? '快乐外放'
+      : '安静陪伴型';
 
   return [
     mbti.startsWith('I') ? '安静蓄电' : '外放发光',
     mbti.includes('N') ? '脑洞巡游' : '细节雷达',
     mbti.includes('T') ? '理性拆解' : '共情敏锐',
     mbti.endsWith('J') ? '计划感强' : '随机应变',
-    season,
+    companionTrait,
   ];
 }
 
