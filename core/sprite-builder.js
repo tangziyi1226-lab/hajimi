@@ -33,23 +33,23 @@ const BASE_SPRITE = [
   
   '....OFFFFFFFFO.....',
   
-  '.....OOFFFFOO......',
+  '....OFFFFFFFFO.....',
   
   '....OFFFFFFFFO.....',
   
   '...OFFFFFFFFFFO....',
   
-  '..OFFFFFFFFFFFFO...',
+  '...OFFFFFFFFFFO....',
   
-  '..OFFFFFFFFFFFFO...',
-  
-  '...OOFFFFFFFFOO....',
+  '...OFFFFFFFFFFO....',
   
   '....OFFFFFFFFO.....',
   
-  '....OOO....OOO.....',
+  '.....OO....OO......',
   
-  '...OO........OO....',
+  '....................',
+  
+  '....................',
   
   '....................',
   
@@ -154,55 +154,23 @@ function drawNeckBridge(grid, pose, colors) {
 }
 
 function drawBodyBridge(grid, pose, colors) {
-  if (!pose.compactBody) return;
-
   const bob = pose.bob ?? 0;
   const bodyY = pose.bodyY ?? 0;
   const top = 12 + bodyY + bob;
-  const bottom = 16 + bodyY + bob;
+  const widen = pose.sit ? 1 : 0;
+  const left = 4 - widen;
+  const right = 14 + widen;
 
-  for (let y = top; y <= bottom; y++) {
-    set(grid, 5, y, colors.O);
-    set(grid, 6, y, colors.F);
-    set(grid, 7, y, colors.F);
-    set(grid, 8, y, colors.F);
-    set(grid, 9, y, colors.F);
-    set(grid, 10, y, colors.F);
-    set(grid, 11, y, colors.F);
-    set(grid, 12, y, colors.F);
-    set(grid, 13, y, colors.F);
-    set(grid, 14, y, colors.O);
+  // 坐姿核心：一整团肚子，不画腿，后腿只通过轮廓暗示。
+  for (let y = top; y <= top + 2; y++) {
+    for (let x = left; x <= right; x++) {
+      const isEdge = x === left || x === right || y === top + 2;
+      set(grid, x, y, isEdge ? colors.O : colors.F);
+    }
   }
 
-  // 坐下时把后腿压成更明显的猫爪，不再露出“腰斩”的空行。
-  set(grid, 5, bottom + 1, colors.O);
-  set(grid, 6, bottom + 1, colors.O);
-  set(grid, 7, bottom + 1, colors.O);
-  set(grid, 12, bottom + 1, colors.O);
-  set(grid, 13, bottom + 1, colors.O);
-  set(grid, 14, bottom + 1, colors.O);
-}
-
-function drawPawBlend(grid, pose, colors) {
-  const bob = pose.bob ?? 0;
-  const bodyY = pose.bodyY ?? 0;
-  const y = 14 + bodyY + bob;
-
-  // 把腿根和肚子连起来，只保留底部圆爪的轮廓差异。
-  for (let row = y; row <= y + 2; row++) {
-    set(grid, 5, row, colors.O);
-    set(grid, 6, row, colors.F);
-    set(grid, 7, row, colors.F);
-    set(grid, 8, row, colors.F);
-    set(grid, 9, row, colors.F);
-    set(grid, 10, row, colors.F);
-    set(grid, 11, row, colors.F);
-    set(grid, 12, row, colors.F);
-    set(grid, 13, row, colors.F);
-    set(grid, 14, row, colors.O);
-  }
-
-  for (let x = 5; x <= 14; x++) set(grid, x, y + 3, colors.F);
+  for (let x = 7; x <= 11; x++) set(grid, x, top, colors.L);
+  for (let x = 6; x <= 12; x++) set(grid, x, top + 1, colors.L);
 }
 
 function drawPawForeground(grid, pose, colors) {
@@ -210,24 +178,20 @@ function drawPawForeground(grid, pose, colors) {
   const bodyY = pose.bodyY ?? 0;
   const y = 16 + bodyY + bob;
 
-  // 遮挡关系：前爪盖在身体下沿之上，爪底再用深色像素收边。
+  // 遮挡关系：前爪是挂在肚子前面的两个团子，不再解释成腿。
   const paws = [
-    [4, y, colors.O],
     [5, y, colors.F],
     [6, y, colors.F],
-    [7, y, colors.O],
-    [11, y, colors.O],
     [12, y, colors.F],
     [13, y, colors.F],
+    [4, y, colors.O],
+    [7, y, colors.O],
+    [11, y, colors.O],
     [14, y, colors.O],
-    [4, y + 1, colors.O],
     [5, y + 1, colors.D],
     [6, y + 1, colors.D],
-    [7, y + 1, colors.O],
-    [11, y + 1, colors.O],
     [12, y + 1, colors.D],
     [13, y + 1, colors.D],
-    [14, y + 1, colors.O],
   ];
 
   paws.forEach(([x, py, color]) => set(grid, x, py, color));
@@ -453,7 +417,6 @@ export function buildFrame(breed, pose = {}) {
   drawTail(grid, pose, colors);
   drawBase(grid, breed, pose, colors);
   drawNeckBridge(grid, pose, colors);
-  drawPawBlend(grid, pose, colors);
   drawBodyBridge(grid, pose, colors);
   drawSiameseMask(grid, breed, colors, pose);
   drawPattern(grid, breed, colors, pose);
@@ -488,7 +451,7 @@ export function buildStateFrames(breed, stateKey, frameCount) {
         pose = { headX: 2 + wave, headY: -1, tailLift: 1, tailWag: 1, eyeStyle: 'wide', pawLift: wave };
         break;
       case 'hunched':
-        pose = { bodyY: 1, headY: 2 + wave, sit: true, compactBody: true, eyeStyle: 'closed', tailDroop: 1 };
+        pose = { bodyY: 1, headY: 2 + wave, sit: true, eyeStyle: 'closed', tailDroop: 1 };
         break;
       case 'headLeft':
         pose = { headX: -2 - wave, tailWag: -1 };
@@ -506,13 +469,13 @@ export function buildStateFrames(breed, stateKey, frameCount) {
         pose = { lean: swing > 0 ? 'right' : 'left', shoulderUneven: true, tailWag: swing };
         break;
       case 'longSit':
-        pose = { bodyY: 1, headY: 1 + wave, sit: true, compactBody: true, chair: true, eyeStyle: i > 1 ? 'tired' : 'normal', tailDroop: 1 };
+        pose = { bodyY: 1, headY: 1 + wave, sit: true, chair: true, eyeStyle: i > 1 ? 'tired' : 'normal', tailDroop: 1 };
         break;
       case 'happy':
         pose = { bob: wave ? -1 : 0, tailLift: 1, tailWag: swing, eyeStyle: 'happy', pawLift: wave };
         break;
       case 'tired':
-        pose = { bodyY: 1, headY: 2 + wave, sit: true, compactBody: true, eyeStyle: 'tired', tailDroop: 1, sleepyZ: true };
+        pose = { bodyY: 1, headY: 2 + wave, sit: true, eyeStyle: 'tired', tailDroop: 1, sleepyZ: true };
         break;
       default:
         pose = {};
