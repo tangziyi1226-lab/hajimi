@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>哈脊米 · 像素桌宠图鉴</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>🐱 哈脊米 · 像素桌宠图鉴</h1>
+    <p>10 个品种 · 12 种姿态 · 纯像素渲染 · 星露谷风格</p>
+  </header>
+
+  <nav class="controls-bar" id="global-controls"></nav>
+
+  <section class="api-demo">
+    <h2>统一动作接口</h2>
+    <pre><code>import createCat from './cats/orange-tabby/cat.js';
+
+const cat = createCat();
+cat.mount('#sprite');
+
+// 方式一：方法调用
+cat.forward();    // 前倾
+cat.happy();      // 开心
+cat.tired();      // 疲惫
+
+// 方式二：play 通用接口
+cat.play('healthy');
+cat.play('tiltLeft');
+
+// 获取所有状态
+cat.getStates();  // [{ key, label, frames }, ...]</code></pre>
+  </section>
+
+  <main class="gallery" id="gallery"></main>
+
+  <footer>
+    每个品种独立文件夹，可直接 <code>import createCat from './cats/xxx/cat.js'</code> 复用
+  </footer>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
