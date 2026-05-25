@@ -76,10 +76,11 @@ async function matchHajimi(payload) {
           {
             role: 'system',
             content: [
-              '你是哈脊米人格匹配师。根据用户 MBTI、性别和 3 道开放题答案，从候选资产库里选择一只最匹配的哈脊米。',
+              '你是结合姿态检测桌宠项目的哈脊米人格匹配师。根据用户 MBTI、性别和 7 道选择题答案，从候选资产库里选择一只最匹配的哈脊米。',
+              '其中有久坐、腰酸背痛、坐姿习惯相关答案，请把姿态健康需求融入结果。',
               '只能选择候选 cats 里已有的 id，不要杜撰新猫。',
               '只输出 JSON，不要 Markdown，不要解释。',
-              'JSON 结构必须是：{"catId":"候选 id","name":"候选 name","description":"60到90字中文性格描述","traits":["人格特征1","人格特征2","人格特征3","人格特征4"]}',
+              'JSON 结构必须是：{"catId":"候选 id","name":"候选 name","description":"60到90字中文性格描述","imageProfile":"一句更符合用户的形象画像","postureHelp":"一句以“哈脊米可以帮助你在改善坐姿上”开头的姿态帮助说明","traits":["人格特征1","人格特征2","人格特征3","人格特征4"]}',
             ].join('\n'),
           },
           {
@@ -116,6 +117,8 @@ function normalizeAiMatch(match, payload) {
     catId: candidate.id,
     name: candidate.name,
     description: String(match.description || `你匹配到 ${candidate.name}。${candidate.personality}`).slice(0, 140),
+    imageProfile: String(match.imageProfile || buildImageProfile(payload)).slice(0, 120),
+    postureHelp: ensurePostureHelp(match.postureHelp || buildPostureHelp(payload)),
     traits: Array.isArray(match.traits) ? match.traits.map(String).slice(0, 5) : buildLocalTraits(payload),
     source: 'deepseek',
   };
@@ -136,6 +139,8 @@ function buildLocalMatch(payload) {
     catId: cat.id,
     name: cat.name,
     description: `你匹配到 ${cat.name}。它${cat.personality}，和你身上“${traits.slice(0, 2).join('、')}”的气质很合拍。`,
+    imageProfile: buildImageProfile(payload),
+    postureHelp: buildPostureHelp(payload),
     traits,
     source: 'local',
   };
@@ -157,6 +162,40 @@ function buildLocalTraits(payload) {
     mbti.endsWith('J') ? '计划感强' : '随机应变',
     companionTrait,
   ];
+}
+
+function buildImageProfile(payload) {
+  const answers = (payload.answers || []).map((item) => item.answer || '');
+  const workMode = answers[1] || '有自己的节奏';
+  const socialMode = answers[2] || '慢热但真诚';
+  const image = workMode.includes('计划')
+    ? '会把毛线球排整齐再出发'
+    : workMode.includes('灵感')
+      ? '灵感一来就竖起耳朵'
+      : workMode.includes('讨论')
+        ? '边喵喵交流边找到方向'
+        : '边试探边调整步伐';
+
+  return `你的形象画像：你像一只${image}的哈脊米，${socialMode}，需要一个既懂你节奏又会提醒你照顾身体的小搭子。`;
+}
+
+function buildPostureHelp(payload) {
+  const answerText = (payload.answers || []).map((item) => item.answer || '').join(' ');
+  const focus = answerText.includes('腰酸') || answerText.includes('塌腰')
+    ? '减少塌腰久坐、及时起身放松腰背'
+    : answerText.includes('肩颈') || answerText.includes('前伸')
+      ? '提醒头颈回正、缓解肩颈紧绷'
+      : answerText.includes('歪') || answerText.includes('翘腿')
+        ? '发现身体歪斜和翘腿倾向'
+        : '建立规律休息和端正坐姿的习惯';
+
+  return `哈脊米可以帮助你在改善坐姿上${focus}，通过姿态检测变换动作，像桌面上的小监督一样陪你坐得更舒服。`;
+}
+
+function ensurePostureHelp(value) {
+  const text = String(value || '').trim();
+  if (!text) return '';
+  return text.startsWith('哈脊米可以帮助你在改善坐姿上') ? text.slice(0, 140) : `哈脊米可以帮助你在改善坐姿上${text}`.slice(0, 140);
 }
 
 async function readBody(req) {

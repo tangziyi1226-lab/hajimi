@@ -95,9 +95,13 @@ function collectPayload() {
       gender: data.get('gender'),
     },
     answers: [
-      { question: '用三句话描述一下你最近的精神状态', answer: data.get('q1') },
-      { question: '你希望你的哈脊米怎么陪你？', answer: data.get('q2') },
-      { question: '朋友眼里的你通常是什么样？', answer: data.get('q3') },
+      { question: '最近的精神状态更像？', answer: data.get('q1') },
+      { question: '你做事时最常见的模式是？', answer: data.get('q2') },
+      { question: '朋友眼里的你更接近？', answer: data.get('q3') },
+      { question: '你平时一坐下来通常会坐多久？', answer: data.get('q4') },
+      { question: '久坐后身体最容易提醒你的地方是？', answer: data.get('q5') },
+      { question: '你最常出现的坐姿小习惯是？', answer: data.get('q6') },
+      { question: '你希望桌宠怎么提醒你？', answer: data.get('q7') },
     ],
     cats: catProfiles,
   };
@@ -115,7 +119,7 @@ async function renderResult(match) {
   displayCat.play('happy');
 
   resultName.textContent = match.name || baseCat.name;
-  resultDescription.textContent = match.description || `你和 ${baseCat.name} 的频率很接近：${baseCat.personality}`;
+  renderDescription(match, baseCat);
   traitList.innerHTML = '';
 
   const traits = Array.isArray(match.traits) && match.traits.length > 0
@@ -130,6 +134,22 @@ async function renderResult(match) {
 
   resultPanel.classList.remove('is-hidden');
   resultPanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function renderDescription(match, baseCat) {
+  const payload = collectPayload();
+  const lines = [
+    match.description || `你和 ${baseCat.name} 的频率很接近：${baseCat.personality}`,
+    match.imageProfile || buildImageProfile(payload),
+    match.postureHelp || buildPostureHelp(payload),
+  ];
+
+  resultDescription.innerHTML = '';
+  lines.filter(Boolean).forEach((line) => {
+    const paragraph = document.createElement('p');
+    paragraph.textContent = line;
+    resultDescription.appendChild(paragraph);
+  });
 }
 
 function renderAtlas() {
@@ -212,6 +232,8 @@ function buildLocalMatch(payload) {
     catId: cat.id,
     name: cat.name,
     description: `你匹配到 ${cat.name}。它${cat.personality}，和你身上“${traits.slice(0, 2).join('、')}”的气质很合拍。`,
+    imageProfile: buildImageProfile(payload),
+    postureHelp: buildPostureHelp(payload),
     traits,
     source: 'local',
   };
@@ -235,6 +257,34 @@ function buildLocalTraits(payload) {
   ];
 
   return traits.filter(Boolean);
+}
+
+function buildImageProfile(payload) {
+  const answers = payload.answers.map((item) => item.answer || '');
+  const workMode = answers[1] || '有自己的节奏';
+  const socialMode = answers[2] || '慢热但真诚';
+  const image = workMode.includes('计划')
+    ? '会把毛线球排整齐再出发'
+    : workMode.includes('灵感')
+      ? '灵感一来就竖起耳朵'
+      : workMode.includes('讨论')
+        ? '边喵喵交流边找到方向'
+        : '边试探边调整步伐';
+
+  return `你的形象画像：你像一只${image}的哈脊米，${socialMode}，需要一个既懂你节奏又会提醒你照顾身体的小搭子。`;
+}
+
+function buildPostureHelp(payload) {
+  const answerText = payload.answers.map((item) => item.answer || '').join(' ');
+  const focus = answerText.includes('腰酸') || answerText.includes('塌腰')
+    ? '减少塌腰久坐、及时起身放松腰背'
+    : answerText.includes('肩颈') || answerText.includes('前伸')
+      ? '提醒头颈回正、缓解肩颈紧绷'
+      : answerText.includes('歪') || answerText.includes('翘腿')
+        ? '发现身体歪斜和翘腿倾向'
+        : '建立规律休息和端正坐姿的习惯';
+
+  return `哈脊米可以帮助你在改善坐姿上${focus}，通过姿态检测变换动作，像桌面上的小监督一样陪你坐得更舒服。`;
 }
 
 function incrementLocalStat(catId) {

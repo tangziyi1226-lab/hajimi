@@ -10,7 +10,7 @@
   <header class="hero">
     <p class="eyebrow">Hajimi Personality Match</p>
     <h1>测测你是哪一只哈脊米</h1>
-    <p>填 MBTI 和性别，再自由回答 3 道问题，生成你的专属哈“脊”米和全站认领图鉴。</p>
+    <p>填 MBTI 和性别，回答 7 道小题，生成你的专属哈“脊”米、形象画像和姿态守护建议。</p>
   </header>
 
   <main class="app-shell">
@@ -60,18 +60,59 @@
         </div>
 
         <fieldset class="question">
-          <legend>1. 用三句话描述一下你最近的精神状态</legend>
-          <textarea name="q1" rows="4" maxlength="220" placeholder="比如：白天很能冲，晚上只想缩成一团；脑子里想法很多，但行动需要一点点推力。" required></textarea>
+          <legend>1. 最近的精神状态更像？</legend>
+          <label><input type="radio" name="q1" value="灵感很多，但行动前需要先观察" required />灵感很多，但行动前需要先观察</label>
+          <label><input type="radio" name="q1" value="能量充足，想到什么就马上开冲" />能量充足，想到什么就马上开冲</label>
+          <label><input type="radio" name="q1" value="有点疲惫，需要安静恢复电量" />有点疲惫，需要安静恢复电量</label>
+          <label><input type="radio" name="q1" value="表面稳定，内心小剧场不断" />表面稳定，内心小剧场不断</label>
         </fieldset>
 
         <fieldset class="question">
-          <legend>2. 你希望你的哈脊米怎么陪你？</legend>
-          <textarea name="q2" rows="4" maxlength="220" placeholder="比如：安静坐在旁边、提醒我休息、陪我发疯、在我emo时贴贴。" required></textarea>
+          <legend>2. 你做事时最常见的模式是？</legend>
+          <label><input type="radio" name="q2" value="先列计划，按步骤稳稳推进" required />先列计划，按步骤稳稳推进</label>
+          <label><input type="radio" name="q2" value="靠灵感驱动，进入状态后很专注" />靠灵感驱动，进入状态后很专注</label>
+          <label><input type="radio" name="q2" value="喜欢和人讨论，边聊边想清楚" />喜欢和人讨论，边聊边想清楚</label>
+          <label><input type="radio" name="q2" value="先试试看，不行再调整方向" />先试试看，不行再调整方向</label>
         </fieldset>
 
         <fieldset class="question">
-          <legend>3. 朋友眼里的你通常是什么样？</legend>
-          <textarea name="q3" rows="4" maxlength="220" placeholder="比如：慢热但靠谱、话很多但很会照顾人、看起来冷静其实很容易心软。" required></textarea>
+          <legend>3. 朋友眼里的你更接近？</legend>
+          <label><input type="radio" name="q3" value="慢热但靠谱，熟了以后很柔软" required />慢热但靠谱，熟了以后很柔软</label>
+          <label><input type="radio" name="q3" value="话很多，会把气氛带热" />话很多，会把气氛带热</label>
+          <label><input type="radio" name="q3" value="看起来冷静，其实很会照顾人" />看起来冷静，其实很会照顾人</label>
+          <label><input type="radio" name="q3" value="独立有边界，但关键时刻很仗义" />独立有边界，但关键时刻很仗义</label>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend>4. 你平时一坐下来通常会坐多久？</legend>
+          <label><input type="radio" name="q4" value="30 分钟内会自然起身活动" required />30 分钟内会自然起身活动</label>
+          <label><input type="radio" name="q4" value="1 到 2 小时才想起来动一动" />1 到 2 小时才想起来动一动</label>
+          <label><input type="radio" name="q4" value="经常一坐就是半天" />经常一坐就是半天</label>
+          <label><input type="radio" name="q4" value="看任务状态，有时会完全忘记休息" />看任务状态，有时会完全忘记休息</label>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend>5. 久坐后身体最容易提醒你的地方是？</legend>
+          <label><input type="radio" name="q5" value="腰酸，坐久了会想塌下去" required />腰酸，坐久了会想塌下去</label>
+          <label><input type="radio" name="q5" value="肩颈紧，头会不自觉前伸" />肩颈紧，头会不自觉前伸</label>
+          <label><input type="radio" name="q5" value="背部僵硬，需要伸展一下" />背部僵硬，需要伸展一下</label>
+          <label><input type="radio" name="q5" value="暂时还好，但想提前预防" />暂时还好，但想提前预防</label>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend>6. 你最常出现的坐姿小习惯是？</legend>
+          <label><input type="radio" name="q6" value="身体会慢慢前倾靠近屏幕" required />身体会慢慢前倾靠近屏幕</label>
+          <label><input type="radio" name="q6" value="容易歪向一边或翘腿" />容易歪向一边或翘腿</label>
+          <label><input type="radio" name="q6" value="坐着坐着就驼背塌腰" />坐着坐着就驼背塌腰</label>
+          <label><input type="radio" name="q6" value="姿态基本稳定，但需要提醒休息" />姿态基本稳定，但需要提醒休息</label>
+        </fieldset>
+
+        <fieldset class="question">
+          <legend>7. 你希望桌宠怎么提醒你？</legend>
+          <label><input type="radio" name="q7" value="温柔提醒，不要打断我的节奏" required />温柔提醒，不要打断我的节奏</label>
+          <label><input type="radio" name="q7" value="明显一点，及时把我从专注里叫醒" />明显一点，及时把我从专注里叫醒</label>
+          <label><input type="radio" name="q7" value="用可爱的动作陪我一起拉伸" />用可爱的动作陪我一起拉伸</label>
+          <label><input type="radio" name="q7" value="根据我的坐姿状态智能变化" />根据我的坐姿状态智能变化</label>
         </fieldset>
 
         <button class="primary-button" type="submit" id="submit-button">召唤我的哈脊米</button>
@@ -89,7 +130,7 @@
         <div class="result-copy">
           <p class="result-label">你解锁了</p>
           <h3 id="result-name"></h3>
-          <p id="result-description"></p>
+          <div class="result-description" id="result-description"></div>
           <div class="trait-list" id="trait-list"></div>
         </div>
       </div>
