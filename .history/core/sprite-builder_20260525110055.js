@@ -12,48 +12,27 @@ const HEAD_ROWS = new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 const BODY_ROWS = new Set([11, 12, 13, 14, 15, 16]);
 
 const BASE_SPRITE = [
-
   '......OO...OO......',
-  
-  '.....OEEO.OEEO.....',
-  
+  '.....OFFO.OFFO.....',
   '....OFFFFOFFFO.....',
-  
-  '...OFFFFFFFFFFO....',
-  
-  '..OFFFFFFFFFFFFO...',
-  
-  '..OFFEOFFFFOEFEO...',
-  
-  '..OFFFFFFFFFFFFO...',
-  
-  '..OFFFFFNNFFFFFO...',
-  
-  '...OFFFFFFFFFFO....',
-  
-  '....OFFFFFFFFO.....',
-  
-  '.....OOFFFFOO......',
-  
-  '....OFFFFFFFFO.....',
-  
-  '...OFFFFFFFFFFO....',
-  
-  '..OFFFFFFFFFFFFO...',
-  
-  '..OFFFFFFFFFFFFO...',
-  
-  '...OOFFFFFFFFOO....',
-  
-  '....OFFFFFFFFO.....',
-  
-  '....OOO....OOO.....',
-  
-  '...OO........OO....',
-  
+  '....OFPFFFFFFPFO....',
+  '...OFFFFFFFFFFFO....',
+  '..OFFFEOFFFEOFFO....',
+  '..OFFFFFFFFFFFFO....',
+  '..OFFFFFNNFFFFFO....',
+  '...OFFFFFFFFFFO.....',
+  '....OFFFFFFFFO......',
+  '.....OFFFFFFO.......',
+  '.....OFFFFFFO.......',
+  '....OFFFFFFFFFFO....',
+  '...OFFFFFFFFFFFFO...',
+  '...OFFOFFFFFFOFFO...',
+  '....OOOOFFFFOOOO....',
+  '...OOOOO....OOOOO...',
   '....................',
-  
-  ];
+  '....................',
+  '....................',
+];
 
 function emptyGrid() {
   return Array.from({ length: H }, () => Array(W).fill(null));
