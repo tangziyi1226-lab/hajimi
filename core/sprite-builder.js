@@ -4,7 +4,7 @@
  */
 
 const W = 20;
-const H = 20;
+const H = 22;
 
 const HEAD_ROWS = new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 const BODY_ROWS = new Set([11, 12, 13, 14, 15, 16]);
@@ -23,10 +23,10 @@ const BASE_SPRITE = [
   '.....OFFFFFFO.......',
   '.....OFFFFFFO.......',
   '....OFF.FFFF.FFO....',
-  '...OFF..FFFF..FFO...',
-  '...OFF.OFFFFO.FFO...',
-  '....OFOO....OOFO....',
-  '.....OO......OO.....',
+  '...OFFO.FFFF.OFFO...',
+  '...OFOO.FFFF.OOFO...',
+  '....OOO......OOO....',
+  '...OOOO......OOOO...',
   '....................',
   '....................',
   '....................',
@@ -126,6 +126,36 @@ function drawNeckBridge(grid, pose, colors) {
     set(grid, center + 2, y, colors.F);
     set(grid, center + 3, y, colors.O);
   }
+}
+
+function drawBodyBridge(grid, pose, colors) {
+  if (!pose.compactBody) return;
+
+  const bob = pose.bob ?? 0;
+  const bodyY = pose.bodyY ?? 0;
+  const top = 12 + bodyY + bob;
+  const bottom = 16 + bodyY + bob;
+
+  for (let y = top; y <= bottom; y++) {
+    set(grid, 5, y, colors.O);
+    set(grid, 6, y, colors.F);
+    set(grid, 7, y, colors.F);
+    set(grid, 8, y, colors.F);
+    set(grid, 9, y, colors.F);
+    set(grid, 10, y, colors.F);
+    set(grid, 11, y, colors.F);
+    set(grid, 12, y, colors.F);
+    set(grid, 13, y, colors.F);
+    set(grid, 14, y, colors.O);
+  }
+
+  // 坐下时把后腿压成更明显的猫爪，不再露出“腰斩”的空行。
+  set(grid, 5, bottom + 1, colors.O);
+  set(grid, 6, bottom + 1, colors.O);
+  set(grid, 7, bottom + 1, colors.O);
+  set(grid, 12, bottom + 1, colors.O);
+  set(grid, 13, bottom + 1, colors.O);
+  set(grid, 14, bottom + 1, colors.O);
 }
 
 function drawWhiskers(grid, pose, colors) {
@@ -277,6 +307,22 @@ function drawActionAccents(grid, pose, colors) {
     set(grid, 4, 12 + (pose.bob ?? 0), colors.O);
     set(grid, 15, 13 + (pose.bob ?? 0), colors.O);
   }
+
+  if (pose.sleepyZ) {
+    const z = [
+      [15, 0],
+      [16, 0],
+      [16, 1],
+      [15, 2],
+      [16, 2],
+      [18, 3],
+      [19, 3],
+      [19, 4],
+      [18, 5],
+      [19, 5],
+    ];
+    z.forEach(([x, y]) => set(grid, x, y, colors.O));
+  }
 }
 
 /**
@@ -290,6 +336,7 @@ export function buildFrame(breed, pose = {}) {
   drawTail(grid, pose, colors);
   drawBase(grid, breed, pose, colors);
   drawNeckBridge(grid, pose, colors);
+  drawBodyBridge(grid, pose, colors);
   drawSiameseMask(grid, breed, colors, pose);
   drawPattern(grid, breed, colors, pose);
   drawFoldEars(grid, breed, colors, pose);
@@ -322,7 +369,7 @@ export function buildStateFrames(breed, stateKey, frameCount) {
         pose = { headX: 2 + wave, headY: -1, tailLift: 1, tailWag: 1, eyeStyle: 'wide', pawLift: wave };
         break;
       case 'hunched':
-        pose = { bodyY: 1, headY: 2 + wave, sit: true, eyeStyle: 'closed', tailDroop: 1 };
+        pose = { bodyY: 1, headY: 2 + wave, sit: true, compactBody: true, eyeStyle: 'closed', tailDroop: 1 };
         break;
       case 'headLeft':
         pose = { headX: -2 - wave, tailWag: -1 };
@@ -340,13 +387,13 @@ export function buildStateFrames(breed, stateKey, frameCount) {
         pose = { lean: swing > 0 ? 'right' : 'left', shoulderUneven: true, tailWag: swing };
         break;
       case 'longSit':
-        pose = { bodyY: 1, headY: 1 + wave, sit: true, eyeStyle: i > 1 ? 'tired' : 'normal', tailDroop: 1 };
+        pose = { bodyY: 1, headY: 1 + wave, sit: true, compactBody: true, eyeStyle: i > 1 ? 'tired' : 'normal', tailDroop: 1 };
         break;
       case 'happy':
-        pose = { bob: wave ? -2 : -1, headY: -1, tailLift: 2, tailWag: swing, eyeStyle: 'happy', pawLift: wave };
+        pose = { bob: wave ? -1 : 0, tailLift: 1, tailWag: swing, eyeStyle: 'happy', pawLift: wave };
         break;
       case 'tired':
-        pose = { bodyY: 1, headY: 2 + wave, sit: true, eyeStyle: 'tired', tailDroop: 1 };
+        pose = { bodyY: 1, headY: 2 + wave, sit: true, compactBody: true, eyeStyle: 'tired', tailDroop: 1, sleepyZ: true };
         break;
       default:
         pose = {};
